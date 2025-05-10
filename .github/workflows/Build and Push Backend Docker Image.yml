@@ -3,7 +3,7 @@ name: Build and Push Backend Docker Image
 on:
   push:
     branches:
-      - Maha-Kefi12-patch-1
+      - main
   workflow_dispatch:
 
 jobs:
