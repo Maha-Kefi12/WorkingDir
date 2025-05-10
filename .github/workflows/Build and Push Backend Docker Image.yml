@@ -1,0 +1,28 @@
+name: Build and Push Backend Docker Image
+
+on:
+  push:
+    branches:
+      - Maha-Kefi12-patch-1
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (this repo)
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: 12mahe
+          password: dckr_pat_uTmr8IkEFR22wgEjmNsQP5v-Moc
+
+      - name: Build and push backend Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./Cloud_In_MyPocket  # Adjust if Dockerfile is in a different folder
+          push: true
+          tags: 12mahe/backend:latest
