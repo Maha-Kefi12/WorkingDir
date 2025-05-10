@@ -23,6 +23,6 @@ jobs:
       - name: Build and push backend Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./Cloud_In_MyPocket  # Adjust if Dockerfile is in a different folder
+          context: .
           push: true
           tags: 12mahe/backend:latest
