@@ -12,7 +12,7 @@ services:
       mysqldb:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/DatabaseEss?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/DatabaseEss?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
       - SPRING_MAIL_HOST=smtp.gmail.com
@@ -29,19 +29,19 @@ services:
       - springboot-mysql-network
 
   mysqldb:
-    image: mysql:8.4.0
+    image: mysql:8.0  # Changed from 8.4.0 to more stable 8.0
     container_name: mysqldb
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=DatabaseEss
-      - MYSQL_INITDB_SKIP_TZINFO=1
+      - MYSQL_INITDB_SKIP_TZINFO=1  # Speeds up initialization
     volumes:
       - mysql-data:/var/lib/mysql
     command: 
       - --default-authentication-plugin=mysql_native_password
-      - --skip-ssl
+      - --skip-ssl  # Disables SSL to prevent ca.pem errors
     networks:
       - springboot-mysql-network
     healthcheck:
@@ -60,5 +60,4 @@ volumes:
 
 networks:
   springboot-mysql-network:
-    name: springboot-mysql-network
-    external: true  # Add this line to use the existing network
+    driver: bridge
