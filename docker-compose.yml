@@ -37,7 +37,7 @@ services:
     networks:
       springboot-mysql-network:
         aliases:
-          - mysql-container  # This makes the container accessible as "mysql-container" on the network
+          - mysqldb  # This makes the container accessible as "mysql-container" on the network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
