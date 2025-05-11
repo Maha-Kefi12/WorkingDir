@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   app:
     build:
@@ -24,9 +23,8 @@ services:
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
     networks:
       - springboot-mysql-network
-
   mysqldb:
-    image: mysql:8.0.33  # Specific stable version
+    image: mysql:8.0.33
     container_name: mysqldb
     ports:
       - "3306:3306"
@@ -43,15 +41,8 @@ services:
       interval: 5s
       timeout: 10s
       retries: 20
-
 volumes:
   mysql-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./mysql-data
-      o: bind
-
 networks:
   springboot-mysql-network:
     driver: bridge
