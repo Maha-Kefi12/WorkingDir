@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy your application’s JAR file into the container
-COPY target/backend.jar /app/GestionUser.jar
+COPY target/GestionUser-0.0.1-SNAPSHOT.jar /app/GestionUser.jar
 
 # Expose the port your backend runs on
 EXPOSE 8080
