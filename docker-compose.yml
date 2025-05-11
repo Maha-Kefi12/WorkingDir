@@ -22,8 +22,8 @@ services:
       - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/DatabaseEssai?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: myuser
-      SPRING_DATASOURCE_PASSWORD: mypass
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 
     ports:
       - "8080:8080"
 
