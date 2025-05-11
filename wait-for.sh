@@ -1,6 +1,6 @@
 #!/bin/sh
 
-host="$1"
+host="${1:-mysqldb}"
 shift
 cmd="$@"
 
