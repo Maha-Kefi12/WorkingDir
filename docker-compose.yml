@@ -1,25 +1,24 @@
+version: '3.8'
+
 services:
   mysql-container:
     image: mysql:8
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: DatabaseEss
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_DATABASE: DatabaseEssai
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    volumes:
-      - mysql_data:/var/lib/mysql
 
   springboot-container:
-    build: .
-    ports:
-      - "8081:8081"
+    image: your-springboot-image-name  # Replace with the actual image name or use build context
+    container_name: springboot-container
     depends_on:
       - mysql-container
-    networks:
-      - springboot-mysql-net
-
-volumes:
-  mysql_data:
-
-networks:
-  springboot-mysql-net:
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/DatabaseEss?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 
