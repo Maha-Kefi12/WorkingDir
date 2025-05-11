@@ -23,8 +23,13 @@ WORKDIR /app
 # Copy the built JAR from the build stage
 COPY --from=build /build/target/GestionUser-0.0.1-SNAPSHOT.jar /app/GestionUser.jar
 
-# Expose the port
-EXPOSE 8080
+# Expose the port used in application.properties
+EXPOSE 8081
+
+# Set environment variables to override properties if needed (optional)
+# You can pass these in docker-compose too
+ENV SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/DatabaseEssai?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 
 # Run the application
 CMD ["java", "-jar", "GestionUser.jar"]
+
