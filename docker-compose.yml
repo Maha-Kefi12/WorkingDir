@@ -12,7 +12,6 @@ services:
         condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/DatabaseEss?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true
-      # Make sure this URL points to "mysqldb" not "mysql-container"
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
       - SPRING_MAIL_HOST=smtp.gmail.com
@@ -36,7 +35,9 @@ services:
       - mysql-data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password --skip-ssl
     networks:
-      - springboot-mysql-network
+      springboot-mysql-network:
+        aliases:
+          - mysql-container  # This makes the container accessible as "mysql-container" on the network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
