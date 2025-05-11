@@ -34,4 +34,4 @@ COPY wait-for.sh /app/wait-for.sh
 RUN chmod +x /app/wait-for.sh
 
 # Run the wait-for script and then the Spring Boot application
-CMD ["./wait-for.sh", "mysql-container:3306", "--", "java", "-jar", "GestionUser.jar"]
+CMD ["./wait-for.sh", "mysqldb:3306", "--", "java", "-jar", "GestionUser.jar"]
