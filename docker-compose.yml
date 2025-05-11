@@ -15,16 +15,23 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
+    networks:
+      - mynetwork
 
   springboot-container:
     build: .
     container_name: springboot-container
     depends_on:
-      mysql-container:
-        condition: service_healthy
+      - mysql-container  # Ensure Spring Boot waits for MySQL container
     ports:
       - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/DatabaseEss?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root_password
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
