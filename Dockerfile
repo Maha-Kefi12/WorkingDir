@@ -11,4 +11,4 @@ COPY target/GestionUser-0.0.1-SNAPSHOT.jar /app/GestionUser.jar
 EXPOSE 8080
 
 # Command to run the backend application
-CMD ["java", "-jar", "GestionUser.jar"]
+CMD ["java", "-jar", "GestionUser-0.0.1-SNAPSHOT.jar"]
