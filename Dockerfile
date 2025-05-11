@@ -1,24 +1,21 @@
-# Stage 1: Build the JAR using Maven
-FROM maven:3.9.4-eclipse-temurin-17 AS build
-WORKDIR /build
-COPY pom.xml .
-RUN mvn dependency:go-offline
-COPY src ./src
-RUN mvn clean package -DskipTests
-
-# Stage 2: Runtime image
+# Stage 2: Create the runtime image
 FROM openjdk:17-jdk-slim
+
+# Install netcat (nc)
+RUN apt-get update && apt-get install -y netcat
+
+# Set working directory
 WORKDIR /app
 
-# Copy the JAR
+# Copy the built JAR from the build stage
 COPY --from=build /build/target/GestionUser-0.0.1-SNAPSHOT.jar /app/GestionUser.jar
 
-# Copy wait-for.sh
+# Expose the port
+EXPOSE 8080
+
+# Add the wait-for script
 COPY wait-for.sh /app/wait-for.sh
 RUN chmod +x /app/wait-for.sh
 
-# Expose the port
-EXPOSE 8081
-
-# Wait for MySQL before running the app
-CMD ["/app/wait-for.sh", "mysql-container", "java", "-jar", "GestionUser.jar"]
+# Run the wait-for script and then the Spring Boot application
+CMD ["./wait-for.sh", "mysql-container:3306", "--", "java", "-jar", "GestionUser.jar"]
