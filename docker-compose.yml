@@ -17,6 +17,7 @@ services:
       timeout: 10s
     networks:
       - mynetwork
+    command: --default-authentication-plugin=mysql_native_password  # Ensure MySQL uses the correct authentication plugin.
 
   springboot-container:
     build: .
@@ -32,6 +33,7 @@ services:
       FLASK_API_URL: http://localhost:5000  # Make sure Flask API URL is correct
     networks:
       - mynetwork
+    command: ["sh", "-c", "while ! nc -z mysql-container 3306; do echo 'Waiting for MySQL...'; sleep 2; done; java -jar /app.jar"]
 
 networks:
   mynetwork:
