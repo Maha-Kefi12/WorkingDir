@@ -21,6 +21,7 @@ services:
       - SPRING_MAIL_PROTOCOL=smtp
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
+      - SPRING.MAIN.ALLOW-BEAN-DEFINITION-OVERRIDING=TRUE
     networks:
       - springboot-mysql-network
   mysqldb:
