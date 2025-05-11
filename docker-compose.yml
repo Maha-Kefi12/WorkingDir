@@ -12,7 +12,7 @@ services:
       mysqldb:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/DatabaseEss?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/DatabaseEss?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&createDatabaseIfNotExist=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=
       - SPRING_MAIL_HOST=smtp.gmail.com
@@ -22,41 +22,35 @@ services:
       - SPRING_MAIL_PROTOCOL=smtp
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
-      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_CONNECTIONTIMEOUT=5000
-      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_TIMEOUT=5000
-      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_WRITETIMEOUT=5000
     networks:
       - springboot-mysql-network
 
   mysqldb:
-    image: mysql:8.0  # Changed from 8.4.0 to more stable 8.0
+    image: mysql:8.0.33  # Specific stable version
     container_name: mysqldb
     ports:
       - "3306:3306"
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=DatabaseEss
-      - MYSQL_INITDB_SKIP_TZINFO=1  # Speeds up initialization
     volumes:
       - mysql-data:/var/lib/mysql
-    command: 
-      - --default-authentication-plugin=mysql_native_password
-      - --skip-ssl  # Disables SSL to prevent ca.pem errors
+    command: --default-authentication-plugin=mysql_native_password --skip-ssl
     networks:
       - springboot-mysql-network
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      retries: 10
-      interval: 3s
-      timeout: 30s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
 
 volumes:
   mysql-data:
     driver: local
     driver_opts:
-      o: bind
       type: none
       device: ./mysql-data
+      o: bind
 
 networks:
   springboot-mysql-network:
