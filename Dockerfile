@@ -1,14 +1,30 @@
-# Use a base image that has Java (assuming Java backend)
+# Stage 1: Build the JAR using Maven
+FROM maven:3.9.4-eclipse-temurin-17 AS build
+
+# Set working directory
+WORKDIR /build
+
+# Copy the pom.xml and download dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy the source code
+COPY src ./src
+
+# Package the application
+RUN mvn clean package -DskipTests
+
+# Stage 2: Create the runtime image
 FROM openjdk:17-jdk-slim
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy your application’s JAR file into the container
-COPY target/GestionUser-0.0.1-SNAPSHOT.jar /app/GestionUser.jar
+# Copy the built JAR from the build stage
+COPY --from=build /build/target/GestionUser-0.0.1-SNAPSHOT.jar /app/GestionUser.jar
 
-# Expose the port your backend runs on
+# Expose the port
 EXPOSE 8080
 
-# Command to run the backend application
-CMD ["java", "-jar", "GestionUser-0.0.1-SNAPSHOT.jar"]
+# Run the application
+CMD ["java", "-jar", "GestionUser.jar"]
